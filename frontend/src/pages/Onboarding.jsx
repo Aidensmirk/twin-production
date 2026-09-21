@@ -13,11 +13,33 @@ export default function Onboarding() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    api.onboardingQuestions().then((res) => setQuestions(res.data));
+    api.onboardingQuestions()
+      .then((res) => {
+        if (!res.data.length) {
+          setError("No onboarding questions are available yet. Please try again shortly.");
+          setQuestions([]);
+          return;
+        }
+        setQuestions(res.data);
+      })
+      .catch(() => {
+        setError("Couldn't load the onboarding questions. Please refresh and try again.");
+        setQuestions([]);
+      });
   }, []);
 
   if (!questions) {
     return <div className="max-w-[640px] mx-auto px-6 py-16 text-fg-dim">Loading…</div>;
+  }
+
+  if (!questions.length) {
+    return (
+      <div className="max-w-[640px] mx-auto px-6 py-16">
+        <div className="bg-warn/10 border border-warn text-[#E4A7AA] px-3.5 py-3 rounded-sm text-[13px]">
+          {error}
+        </div>
+      </div>
+    );
   }
 
   const idx = profile?.onboarding_index || 0;

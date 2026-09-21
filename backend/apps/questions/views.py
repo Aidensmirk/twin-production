@@ -1,5 +1,6 @@
 import uuid
 
+from django.core.management import call_command
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -13,6 +14,9 @@ from .serializers import QuestionSerializer
 class OnboardingQuestionsView(APIView):
     def get(self, request):
         qs = Question.objects.filter(is_onboarding=True)
+        if not qs.exists():
+            call_command("seed_questions")
+            qs = Question.objects.filter(is_onboarding=True)
         return Response(QuestionSerializer(qs, many=True).data)
 
 
