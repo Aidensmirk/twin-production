@@ -3,9 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../api/client";
 import Nav from "../components/Nav.jsx";
 import CategoryBars from "../components/CategoryBars.jsx";
+import TwinPresence from "../components/TwinPresence.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export default function Home() {
   const navigate = useNavigate();
+  const { profile } = useAuth();
   const [data, setData] = useState(null);
   const [nextQuestion, setNextQuestion] = useState(undefined); // undefined = loading
 
@@ -45,6 +48,12 @@ export default function Home() {
         <div className="text-fg-faint text-[12.5px] mb-2">your twin</div>
         <h2 className="font-serif text-[24px] font-medium mb-1.5">{status}</h2>
         <p className="text-fg-dim text-[15.5px] max-w-[52ch] mb-8">{sub}</p>
+
+        <TwinPresence
+          username={profile?.username}
+          roundCount={n}
+          averageScore={data.average_score}
+        />
 
         <div className="grid grid-cols-2 gap-4 mb-8">
           <div className="bg-bg-elevated border border-fg/10 rounded-sm p-5">
