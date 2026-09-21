@@ -1,4 +1,5 @@
 import os
+import importlib
 from pathlib import Path
 from dotenv import load_dotenv
 from datetime import timedelta
@@ -66,8 +67,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 # DB_ENGINE=postgres matches the production blueprint -- use this when you deploy,
 # or any time you have Postgres/Docker available and want to test against it.
 if os.environ.get("DATABASE_URL"):
-    import dj_database_url
-
+    dj_database_url = importlib.import_module("dj_database_url")
     DATABASES = {"default": dj_database_url.parse(os.environ["DATABASE_URL"])}
 elif os.environ.get("DB_ENGINE", "sqlite") == "postgres":
     DATABASES = {
