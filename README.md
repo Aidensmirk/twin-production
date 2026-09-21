@@ -124,14 +124,16 @@ questions, then run a prediction round. Check `/admin/` to see the locked
 
 ### Deploy to Render
 
-The repository includes `render.yaml` for a Render Blueprint deployment. It creates
-the Django API, a PostgreSQL database, and the Vite frontend.
+The repository includes `render.yaml` for a free Render Blueprint deployment. It creates
+the Django API and Vite frontend. Use a free Neon PostgreSQL database for `DATABASE_URL`.
 
 1. Push this repository to GitHub.
 2. In Render, choose **New > Blueprint** and select the repository.
-3. Enter `GEMINI_API_KEY` when Render prompts for the secret.
-4. Deploy the Blueprint. The API runs migrations and seeds the question bank on startup.
-5. Open the `twin-web` Render URL and register a test account.
+3. Create a free PostgreSQL database at Neon, then enter its connection string as
+  `DATABASE_URL` when Render prompts for the secret.
+4. Enter `GEMINI_API_KEY` when Render prompts for the secret.
+5. Deploy the Blueprint. The API runs migrations and seeds the question bank on startup.
+6. Open the `twin-web` Render URL and register a test account.
 
 The Blueprint uses Gemini in production. Ollama remains a local-development fallback;
 it is not available inside the Render service. Do not commit `.env`, API keys, `db.sqlite3`,
