@@ -16,9 +16,6 @@ from .serializers import MatchResultSerializer
 from .services import ai
 
 
-# ---------------------------------------------------------------------------
-# Onboarding
-# ---------------------------------------------------------------------------
 
 class AnswerOnboardingView(APIView):
     """
@@ -57,9 +54,7 @@ class AnswerOnboardingView(APIView):
         )
 
 
-# ---------------------------------------------------------------------------
-# The prediction-lock round flow (the core integrity guarantee of the product)
-# ---------------------------------------------------------------------------
+
 
 class StartRoundView(APIView):
     """
@@ -74,8 +69,7 @@ class StartRoundView(APIView):
         if not question_id:
             return Response({"detail": "question_id is required."}, status=400)
 
-        # available_questions() scopes to seeded questions + this user's own
-        # generated ones, so a user can't start a round on someone else's scenario.
+   
         question = get_object_or_404(available_questions(request.user), id=question_id)
 
         if Answer.objects.filter(user=request.user, question=question).exists():
@@ -168,10 +162,6 @@ class SubmitRoundAnswerView(APIView):
         return Response(MatchResultSerializer(match).data, status=201)
 
 
-# ---------------------------------------------------------------------------
-# Dashboard / Insights / History
-# ---------------------------------------------------------------------------
-
 class DashboardView(APIView):
     def get(self, request):
         profile, _ = UserProfile.objects.get_or_create(user=request.user)
@@ -230,10 +220,6 @@ class HistoryView(APIView):
         results = MatchResult.objects.filter(user=request.user).order_by("-created_at")
         return Response(MatchResultSerializer(results, many=True).data)
 
-
-# ---------------------------------------------------------------------------
-# Privacy: export & delete
-# ---------------------------------------------------------------------------
 
 class ExportDataView(APIView):
     def get(self, request):

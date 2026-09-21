@@ -64,8 +64,6 @@ client.interceptors.response.use(
   }
 );
 
-// --- API surface ---
-
 export const api = {
   register: (data) => client.post("/auth/register/", data),
   login: (data) => client.post("/auth/login/", data),

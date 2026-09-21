@@ -10,7 +10,7 @@ export default function Home() {
   const navigate = useNavigate();
   const { profile } = useAuth();
   const [data, setData] = useState(null);
-  const [nextQuestion, setNextQuestion] = useState(undefined); // undefined = loading
+  const [nextQuestion, setNextQuestion] = useState(undefined);
 
   function load() {
     api.dashboard().then((res) => setData(res.data));

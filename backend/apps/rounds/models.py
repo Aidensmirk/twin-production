@@ -38,7 +38,6 @@ class Prediction(models.Model):
         unique_together = ("user", "question")
 
     def save(self, *args, **kwargs):
-        # Predictions are write-once: once locked they cannot be edited.
         if self.pk is not None:
             existing = Prediction.objects.get(pk=self.pk)
             if existing.is_locked:

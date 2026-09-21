@@ -19,9 +19,8 @@ class Question(models.Model):
     is_onboarding = models.BooleanField(default=False)
     order = models.PositiveIntegerField(default=0)
 
-    # AI-generated scenarios, created on demand once a user exhausts the seeded
-    # bank. These are scoped to the person they were written for -- one user's
-    # generated questions never leak into another user's rounds.
+   
+    
     is_generated = models.BooleanField(default=False)
     created_for = models.ForeignKey(
         settings.AUTH_USER_MODEL,

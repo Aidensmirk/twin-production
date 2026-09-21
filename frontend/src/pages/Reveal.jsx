@@ -15,8 +15,6 @@ export default function Reveal() {
 
   async function nextRound() {
     const res = await api.nextQuestion();
-    // If the bank is empty, go into the round anyway with generate:true --
-    // the twin will author a fresh scenario rather than dead-ending.
     navigate("/round", { state: res.data.question ? {} : { generate: true } });
   }
 

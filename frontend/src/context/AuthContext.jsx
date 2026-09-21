@@ -4,7 +4,7 @@ import { api, setTokens, clearTokens } from "../api/client";
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [profile, setProfile] = useState(null); // { username, onboarded, streak, best_streak, ... }
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const refreshProfile = useCallback(async () => {

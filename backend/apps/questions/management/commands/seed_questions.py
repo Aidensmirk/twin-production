@@ -1,10 +1,6 @@
 from django.core.management.base import BaseCommand
 from apps.questions.models import Question
 
-# Mirrors the question bank used in the TWIN interactive prototype, so a
-# fresh production database starts with the same 28 scenarios: 7 categories
-# x 4 questions each. The first question in each category is the onboarding
-# question for that category.
 QUESTIONS = [
     ("v1", "values", "A friend asks you to lie for them in a small, harmless way. What do you do?", True),
     ("v2", "values", "You find out a company you like quietly does something you disagree with. Do you stop buying from them?", False),

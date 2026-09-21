@@ -1,5 +1,3 @@
-# Spins up just Postgres for local development.
-# Run Django itself with: python manage.py runserver
 version: "3.9"
 services:
   db:

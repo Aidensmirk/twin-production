@@ -63,9 +63,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# DB_ENGINE=sqlite (default) needs nothing installed -- good for local dev/Cursor.
-# DB_ENGINE=postgres matches the production blueprint -- use this when you deploy,
-# or any time you have Postgres/Docker available and want to test against it.
 if os.environ.get("DATABASE_URL"):
     dj_database_url = importlib.import_module("dj_database_url")
     DATABASES = {"default": dj_database_url.parse(os.environ["DATABASE_URL"])}
@@ -126,7 +123,6 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^https://.*\.vercel\.app$",
 ]
 
-# --- TWIN-specific settings ---
 AI_PROVIDER = os.environ.get("AI_PROVIDER", "gemini").lower()
 AI_FALLBACK_TO_OLLAMA = os.environ.get("AI_FALLBACK_TO_OLLAMA", "False") == "True"
 AI_REQUEST_TIMEOUT = int(os.environ.get("AI_REQUEST_TIMEOUT", "25"))

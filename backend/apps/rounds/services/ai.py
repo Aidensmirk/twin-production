@@ -101,7 +101,7 @@ def _call(system, user_content):
             system=system,
             messages=[{"role": "user", "content": user_content}],
         )
-    except Exception as exc:  # network / auth / rate-limit errors from the SDK
+    except Exception as exc:
         raise AIServiceError(f"Anthropic API call failed: {exc}") from exc
 
     text = "".join(block.text for block in resp.content if getattr(block, "type", None) == "text")

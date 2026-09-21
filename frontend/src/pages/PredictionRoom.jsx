@@ -6,11 +6,6 @@ import Spinner from "../components/Spinner.jsx";
 import ErrorBox from "../components/ErrorBox.jsx";
 import TwinSignal from "../components/TwinSignal.jsx";
 
-// Stages:
-//   "writing"   -> seeded bank exhausted, twin is authoring a brand-new scenario
-//   "locking"   -> server is generating + locking its prediction (hidden from us)
-//   "answering" -> prediction is locked in the DB, user can type
-//   "scoring"   -> answer submitted, waiting on the reveal
 export default function PredictionRoom() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -37,8 +32,6 @@ export default function PredictionRoom() {
       }
 
       if (!q) {
-        // Bank exhausted (or the user explicitly asked for a new scenario):
-        // have the twin write one targeting its own weakest category.
         setStage("writing");
         const gen = await api.generateQuestion();
         q = gen.data;
@@ -57,7 +50,6 @@ export default function PredictionRoom() {
 
   useEffect(() => {
     beginRound();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function submit(e) {
