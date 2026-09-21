@@ -42,6 +42,19 @@ export default function TwinPresence({ roundCount = 0, averageScore = null, user
           built from {roundCount} {roundCount === 1 ? "round" : "rounds"} of signal
         </div>
       </div>
+      <div className="twin-presence__body" aria-hidden="true">
+        <div className="twin-body-orbit twin-body-orbit--one" />
+        <div className="twin-body-orbit twin-body-orbit--two" />
+        <div className="twin-body">
+          <div className="twin-body__head"><span /></div>
+          <div className="twin-body__neck" />
+          <div className="twin-body__torso" />
+          <div className="twin-body__arm twin-body__arm--left" />
+          <div className="twin-body__arm twin-body__arm--right" />
+          <div className="twin-body__signal" />
+        </div>
+        <div className="twin-body__caption">a reflection in progress</div>
+      </div>
     </section>
   );
 }

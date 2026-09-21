@@ -157,7 +157,7 @@ body::after {
 
 .twin-presence {
   display: grid;
-  grid-template-columns: 132px 1fr;
+  grid-template-columns: 132px minmax(0, 1fr) 170px;
   align-items: center;
   gap: 18px;
   min-height: 158px;
@@ -241,6 +241,94 @@ body::after {
 .twin-presence__state span, .twin-presence__signal { display: inline-block; width: 5px; height: 5px; margin-right: 5px; border-radius: 50%; background: #5FA8A0; box-shadow: 0 0 8px rgba(95, 168, 160, 0.8); }
 .twin-presence__signal { margin: 0; width: 4px; height: 4px; }
 
+.twin-presence__body {
+  height: 158px;
+  position: relative;
+  overflow: hidden;
+  border-left: 1px solid rgba(237, 234, 227, 0.1);
+  background: linear-gradient(180deg, rgba(18, 20, 28, 0), rgba(18, 20, 28, 0.38));
+}
+
+.twin-body-orbit {
+  position: absolute;
+  border: 1px solid rgba(95, 168, 160, 0.23);
+  border-radius: 50%;
+  transform: rotate(-24deg);
+}
+.twin-body-orbit--one { width: 116px; height: 152px; top: 2px; left: 29px; }
+.twin-body-orbit--two { width: 86px; height: 138px; top: 9px; left: 44px; border-color: rgba(216, 162, 74, 0.22); transform: rotate(27deg); }
+.twin-body {
+  position: absolute;
+  left: 54px;
+  bottom: 0;
+  width: 68px;
+  height: 145px;
+}
+.twin-body__head {
+  position: absolute;
+  top: 0;
+  left: 19px;
+  width: 31px;
+  height: 38px;
+  border: 1px solid rgba(237, 234, 227, 0.65);
+  border-radius: 48% 48% 44% 44%;
+  background: #1a222b;
+}
+.twin-body__head span {
+  position: absolute;
+  right: 5px;
+  top: 16px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #5FA8A0;
+  box-shadow: 0 0 8px rgba(95, 168, 160, 0.8);
+}
+.twin-body__neck { position: absolute; top: 35px; left: 29px; width: 11px; height: 14px; background: #1a222b; }
+.twin-body__torso {
+  position: absolute;
+  top: 43px;
+  left: 9px;
+  width: 51px;
+  height: 87px;
+  border: 1px solid rgba(95, 168, 160, 0.6);
+  border-radius: 48% 48% 17% 17%;
+  background: linear-gradient(105deg, rgba(95, 168, 160, 0.2), rgba(18, 20, 28, 0.18));
+}
+.twin-body__arm {
+  position: absolute;
+  top: 48px;
+  width: 12px;
+  height: 75px;
+  border: 1px solid rgba(237, 234, 227, 0.34);
+  border-radius: 12px;
+  background: rgba(95, 168, 160, 0.09);
+}
+.twin-body__arm--left { left: 0; transform: rotate(8deg); }
+.twin-body__arm--right { right: 0; transform: rotate(-8deg); }
+.twin-body__signal {
+  position: absolute;
+  top: 77px;
+  left: 31px;
+  width: 8px;
+  height: 8px;
+  border: 1px solid #D8A24A;
+  border-radius: 50%;
+  box-shadow: 0 0 0 5px rgba(216, 162, 74, 0.08), 0 0 15px rgba(216, 162, 74, 0.65);
+  animation: signal-pulse 2.2s ease-in-out infinite;
+}
+.twin-body__caption {
+  position: absolute;
+  bottom: 7px;
+  left: 0;
+  width: 100%;
+  color: rgba(237, 234, 227, 0.4);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
 @keyframes twin-hover {
   50% { transform: translateY(-4px) scale(1.03); opacity: 0.8; }
 }
@@ -250,10 +338,14 @@ body::after {
   .twin-presence__portrait { transform: scale(0.78); transform-origin: center left; }
   .twin-presence__copy p { font-size: 17px; }
   .twin-presence__state { font-size: 9px; }
+  .twin-presence__body { grid-column: 1 / -1; height: 124px; border-left: 0; border-top: 1px solid rgba(237, 234, 227, 0.1); }
+  .twin-body { transform: scale(0.82); transform-origin: bottom center; left: calc(50% - 34px); }
+  .twin-body-orbit--one { left: calc(50% - 58px); }
+  .twin-body-orbit--two { left: calc(50% - 43px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .twin-presence__halo { animation: none; }
+  .twin-presence__halo, .twin-body__signal { animation: none; }
 }
 
 @keyframes signal-spin {
