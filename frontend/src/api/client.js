@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
+const configuredBaseUrl =
+  import.meta.env.VITE_API_BASE_URL || "https://twin-api.onrender.com";
+const BASE_URL = `${configuredBaseUrl.replace(/\/$/, "")}/api`;
 
 export const client = axios.create({ baseURL: BASE_URL });
 
