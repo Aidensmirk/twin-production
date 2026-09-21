@@ -128,6 +128,8 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
 
 # --- TWIN-specific settings ---
 AI_PROVIDER = os.environ.get("AI_PROVIDER", "gemini").lower()
+AI_FALLBACK_TO_OLLAMA = os.environ.get("AI_FALLBACK_TO_OLLAMA", "False") == "True"
+AI_REQUEST_TIMEOUT = int(os.environ.get("AI_REQUEST_TIMEOUT", "25"))
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 GEMINI_BASE_URL = os.environ.get(
     "GEMINI_BASE_URL", "https://generativelanguage.googleapis.com/v1beta"

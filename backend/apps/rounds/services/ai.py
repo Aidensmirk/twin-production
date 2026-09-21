@@ -82,6 +82,8 @@ def _call(system, user_content):
         try:
             return _call_gemini(system, user_content)
         except AIServiceError as gemini_error:
+            if not settings.AI_FALLBACK_TO_OLLAMA:
+                raise gemini_error
             try:
                 return _call_ollama(system, user_content)
             except AIServiceError as ollama_error:
@@ -135,7 +137,7 @@ def _call_gemini(system, user_content):
         method="POST",
     )
     try:
-        with urlopen(request, timeout=45) as response:
+        with urlopen(request, timeout=settings.AI_REQUEST_TIMEOUT) as response:
             result = json.loads(response.read().decode("utf-8"))
     except HTTPError as exc:
         raise AIServiceError(f"Gemini request failed with HTTP {exc.code}.") from exc

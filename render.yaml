@@ -4,7 +4,7 @@ services:
     runtime: python
     rootDir: backend
     buildCommand: pip install -r requirements.txt
-    startCommand: python manage.py migrate && python manage.py seed_questions && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+    startCommand: python manage.py migrate && python manage.py seed_questions && gunicorn config.wsgi:application --timeout 35 --bind 0.0.0.0:$PORT
     envVars:
       - key: DJANGO_SECRET_KEY
         generateValue: true
@@ -16,6 +16,10 @@ services:
         value: sqlite
       - key: AI_PROVIDER
         value: gemini
+      - key: AI_FALLBACK_TO_OLLAMA
+        value: "False"
+      - key: AI_REQUEST_TIMEOUT
+        value: "25"
       - key: GEMINI_API_KEY
         sync: false
       - key: GEMINI_MODEL
