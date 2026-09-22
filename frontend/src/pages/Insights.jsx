@@ -6,10 +6,13 @@ import CategoryBars from "../components/CategoryBars.jsx";
 export default function Insights() {
   const [data, setData] = useState(null);
   const [summary, setSummary] = useState(null);
+  const [summaryError, setSummaryError] = useState(false);
 
   useEffect(() => {
     api.insights().then((res) => setData(res.data));
-    api.summary().then((res) => setSummary(res.data));
+    api.summary()
+      .then((res) => setSummary(res.data))
+      .catch(() => setSummaryError(true));
   }, []);
 
   return (
@@ -42,11 +45,15 @@ export default function Insights() {
                 </div>
                 <p className="text-fg-faint text-[12.5px] leading-relaxed mt-5">{summary.uncertainty}</p>
               </section>
-            ) : summary && (
+            ) : summary ? (
               <div className="border border-fg/10 bg-bg-elevated px-4 py-3.5 text-[13px] text-fg-dim mb-9">
                 Complete {summary.rounds_needed} more {summary.rounds_needed === 1 ? "round" : "rounds"} to see what your twin thinks it knows about you.
               </div>
-            )}
+            ) : summaryError ? (
+              <div className="border border-fg/10 bg-bg-elevated px-4 py-3.5 text-[13px] text-fg-dim mb-9">
+                Your twin could not refresh its portrait right now. Try again after your next round.
+              </div>
+            ) : null}
 
             <div className="text-fg-faint text-[12.5px] mb-2 tracking-wide">match over time</div>
             <div className="flex items-end gap-1 h-[60px] mb-8">

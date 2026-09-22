@@ -88,7 +88,10 @@ def _extract_json(text):
     end = text.rfind("}")
     if start == -1 or end == -1:
         raise AIServiceError("No JSON object found in AI response.")
-    return json.loads(text[start : end + 1])
+    try:
+        return json.loads(text[start : end + 1])
+    except json.JSONDecodeError as exc:
+        raise AIServiceError("AI returned invalid JSON.") from exc
 
 
 def _call(system, user_content):
