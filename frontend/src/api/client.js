@@ -81,6 +81,7 @@ export const api = {
 
   dashboard: () => client.get("/dashboard/"),
   insights: () => client.get("/insights/"),
+  summary: () => client.get("/summary/"),
   history: () => client.get("/history/"),
 
   exportData: () => client.get("/privacy/export/"),

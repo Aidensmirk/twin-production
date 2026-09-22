@@ -241,6 +241,18 @@ body::after {
 .twin-presence__state span, .twin-presence__signal { display: inline-block; width: 5px; height: 5px; margin-right: 5px; border-radius: 50%; background: #5FA8A0; box-shadow: 0 0 8px rgba(95, 168, 160, 0.8); }
 .twin-presence__signal { margin: 0; width: 4px; height: 4px; }
 
+.insight-summary {
+  border-top: 1px solid rgba(216, 162, 74, 0.5);
+  border-bottom: 1px solid rgba(237, 234, 227, 0.1);
+  padding: 22px 0 20px;
+}
+
+.insight-summary__trait {
+  padding: 11px 13px;
+  border-left: 2px solid rgba(95, 168, 160, 0.55);
+  background: rgba(95, 168, 160, 0.045);
+}
+
 .twin-presence__body {
   height: 158px;
   position: relative;

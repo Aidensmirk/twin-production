@@ -59,6 +59,20 @@ SCORING_SYSTEM = (
     'true or false, "changeNote": "1 sentence on what changed, or null"}'
 )
 
+SUMMARY_SYSTEM = (
+    "You are the reflective layer of TWIN, an AI Twin built from one user's own "
+    "answers and completed prediction rounds. Write a careful, human-sounding "
+    "portrait of the user based only on the supplied evidence. Describe tendencies "
+    "as observations, not fixed labels: never diagnose, insult, moralize, or make "
+    "claims about protected traits. Include strengths and tensions, and name what "
+    "the evidence does not establish. Use the user's own answers as evidence. "
+    "Respond ONLY with raw JSON matching exactly this shape: "
+    '{"headline":"a concise 3-8 word portrait", "summary":"3-5 sentences '
+    'written directly to the user", "characteristics":[{"name":"short trait", '
+    '"evidence":"one sentence grounded in their answers"}], "uncertainty":"one '
+    'sentence about what the twin is still learning"}. Include 3-5 characteristics.'
+)
+
 
 class AIServiceError(Exception):
     pass
@@ -286,4 +300,31 @@ def score_round(question, prediction, actual_answer_text):
         "explanation": data.get("explanation", ""),
         "change_detected": bool(data.get("changeDetected", False)),
         "change_note": data.get("changeNote"),
+    }
+
+
+def generate_summary(user, results):
+    evidence = []
+    for result in results:
+        evidence.append(
+            f"[{result.question.category}] Question: {result.question.text}\n"
+            f"User answer: {result.answer.text}\n"
+            f"Twin prediction: {result.prediction.predicted_text}\n"
+            f"Match score: {result.score}/100"
+        )
+    data = _extract_json(
+        _call(
+            SUMMARY_SYSTEM,
+            f"USER: {user.username}\n\nCOMPLETED ROUND EVIDENCE:\n"
+            + "\n\n".join(evidence),
+        )
+    )
+    characteristics = data.get("characteristics", [])
+    if not isinstance(characteristics, list):
+        raise AIServiceError("AI response returned invalid characteristics.")
+    return {
+        "headline": str(data.get("headline") or "A pattern is taking shape"),
+        "summary": str(data.get("summary") or "Your twin is still learning from your choices."),
+        "characteristics": characteristics[:5],
+        "uncertainty": str(data.get("uncertainty") or "More rounds will make this portrait more precise."),
     }

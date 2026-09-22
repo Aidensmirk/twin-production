@@ -5,9 +5,11 @@ import CategoryBars from "../components/CategoryBars.jsx";
 
 export default function Insights() {
   const [data, setData] = useState(null);
+  const [summary, setSummary] = useState(null);
 
   useEffect(() => {
     api.insights().then((res) => setData(res.data));
+    api.summary().then((res) => setSummary(res.data));
   }, []);
 
   return (
@@ -24,6 +26,27 @@ export default function Insights() {
         ) : (
           <>
             <p className="text-fg-dim text-[15.5px] mb-8">How predictable you've actually been, round by round.</p>
+
+            {summary?.ready ? (
+              <section className="insight-summary mb-10">
+                <div className="text-fg-faint text-[11px] uppercase tracking-[0.16em] mb-2">what your twin has learned</div>
+                <h3 className="font-serif text-[25px] leading-tight mb-3">{summary.headline}</h3>
+                <p className="text-fg-dim text-[15px] leading-relaxed mb-6">{summary.summary}</p>
+                <div className="grid gap-3">
+                  {summary.characteristics.map((item, index) => (
+                    <div key={`${item.name}-${index}`} className="insight-summary__trait">
+                      <div className="text-[13px] text-twin font-medium mb-1">{item.name}</div>
+                      <div className="text-[13.5px] text-fg-dim leading-relaxed">{item.evidence}</div>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-fg-faint text-[12.5px] leading-relaxed mt-5">{summary.uncertainty}</p>
+              </section>
+            ) : summary && (
+              <div className="border border-fg/10 bg-bg-elevated px-4 py-3.5 text-[13px] text-fg-dim mb-9">
+                Complete {summary.rounds_needed} more {summary.rounds_needed === 1 ? "round" : "rounds"} to see what your twin thinks it knows about you.
+              </div>
+            )}
 
             <div className="text-fg-faint text-[12.5px] mb-2 tracking-wide">match over time</div>
             <div className="flex items-end gap-1 h-[60px] mb-8">

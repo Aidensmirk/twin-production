@@ -215,6 +215,24 @@ class InsightsView(APIView):
         )
 
 
+class SummaryView(APIView):
+    def get(self, request):
+        results = list(
+            MatchResult.objects.filter(user=request.user)
+            .select_related("question", "answer", "prediction")
+            .order_by("created_at")
+        )
+        minimum_rounds = 3
+        if len(results) < minimum_rounds:
+            return Response({"ready": False, "rounds_needed": minimum_rounds - len(results)})
+
+        try:
+            summary = ai.generate_summary(request.user, results)
+        except ai.AIServiceError as exc:
+            return Response({"detail": str(exc)}, status=502)
+        return Response({"ready": True, "round_count": len(results), **summary})
+
+
 class HistoryView(APIView):
     def get(self, request):
         results = MatchResult.objects.filter(user=request.user).order_by("-created_at")
