@@ -17,6 +17,14 @@ export default function PredictionRoom() {
   const [answer, setAnswer] = useState("");
   const [error, setError] = useState(null);
 
+  function getErrorMessage(error, fallback) {
+    const detail = error.response?.data?.detail;
+    if (detail) return detail;
+    if (error.response?.status === 401) return "Your session expired. Please log in again.";
+    if (error.response?.status === 502) return "The AI service is temporarily unavailable. Try again in a moment.";
+    return fallback;
+  }
+
   async function beginRound() {
     setError(null);
     setQuestion(null);
@@ -44,7 +52,7 @@ export default function PredictionRoom() {
       setPredictionId(started.data.prediction_id);
       setStage("answering");
     } catch (e) {
-      setError("Your twin couldn't start this round just now.");
+      setError(getErrorMessage(e, "Your twin couldn't start this round just now."));
     }
   }
 
@@ -52,8 +60,7 @@ export default function PredictionRoom() {
     beginRound();
   }, []);
 
-  function submit(e) {
-    e.preventDefault();
+  function submitAnswer() {
     const val = answer.trim();
     if (!val || !predictionId) return;
     setStage("scoring");
@@ -61,10 +68,15 @@ export default function PredictionRoom() {
     api
       .submitRoundAnswer(predictionId, val)
       .then((res) => navigate("/reveal", { state: { round: res.data } }))
-      .catch(() => {
-        setError("Couldn't score this round.");
+      .catch((e) => {
+        setError(getErrorMessage(e, "Couldn't score this round."));
         setStage("answering");
       });
+  }
+
+  function submit(e) {
+    e.preventDefault();
+    submitAnswer();
   }
 
   return (
@@ -81,7 +93,7 @@ export default function PredictionRoom() {
           </>
         )}
 
-        {error && <ErrorBox message={error} onRetry={beginRound} />}
+        {error && <ErrorBox message={error} onRetry={predictionId ? submitAnswer : beginRound} />}
 
         {stage === "writing" && !error && (
           <Spinner label="You've answered everything in the bank — your twin is writing a new scenario to test where it understands you least." />
